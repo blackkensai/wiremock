@@ -15,6 +15,7 @@
  */
 package com.github.tomakehurst.wiremock.extension.responsetemplating.helpers;
 
+import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Options;
 import com.github.tomakehurst.wiremock.common.Xml;
 import org.w3c.dom.Document;
@@ -74,7 +75,7 @@ public class HandlebarsXPathHelper extends HandlebarsHelper<String> {
                 return "";
             }
 
-            return Xml.toStringValue(node);
+            return new Handlebars.SafeString(Xml.toStringValue(node));
         } catch (XPathExpressionException e) {
             return handleError(xPathInput + " is not a valid XPath expression", e);
         }
