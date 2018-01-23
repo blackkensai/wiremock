@@ -15,6 +15,13 @@
  */
 package com.github.tomakehurst.wiremock.extension.responsetemplating;
 
+import static com.github.tomakehurst.wiremock.common.Exceptions.throwUnchecked;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Template;
@@ -24,6 +31,8 @@ import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.common.TextFile;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseDefinitionTransformer;
+import com.github.tomakehurst.wiremock.extension.helpers.INamedHelper;
+import com.github.tomakehurst.wiremock.extension.helpers.SupplementHelpers;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.WiremockHelpers;
 import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.http.HttpHeaders;
@@ -33,13 +42,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import static com.github.tomakehurst.wiremock.common.Exceptions.throwUnchecked;
 
 public class ResponseTemplateTransformer extends ResponseDefinitionTransformer {
 
@@ -70,6 +72,10 @@ public class ResponseTemplateTransformer extends ResponseDefinitionTransformer {
         //Add all available wiremock helpers
         for(WiremockHelpers helper: WiremockHelpers.values()){
             this.handlebars.registerHelper(helper.name(), helper);
+        }
+        
+        for(INamedHelper helper: SupplementHelpers.values()) {
+        	this.handlebars.registerHelper(helper.getName(), helper);
         }
 
         for (Map.Entry<String, Helper> entry: helpers.entrySet()) {

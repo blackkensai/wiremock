@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.helper.StringHelpers;
+import com.github.tomakehurst.wiremock.extension.helpers.INamedHelper;
+import com.github.tomakehurst.wiremock.extension.helpers.SupplementHelpers;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.RequestTemplateModel;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.WiremockHelpers;
 import com.google.common.collect.ImmutableMap;
@@ -47,6 +49,10 @@ public class AsyncCallbackTask {
 		for (WiremockHelpers helper : WiremockHelpers.values()) {
 			this.handlebars.registerHelper(helper.name(), helper);
 		}
+		
+        for(INamedHelper helper: SupplementHelpers.values()) {
+        	this.handlebars.registerHelper(helper.getName(), helper);
+        }
 	}
 
 	private String resolveTemplate(String template, CallbackTask task) throws IOException {
