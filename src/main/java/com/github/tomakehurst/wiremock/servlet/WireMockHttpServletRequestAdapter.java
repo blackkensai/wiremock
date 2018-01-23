@@ -117,7 +117,7 @@ public class WireMockHttpServletRequestAdapter implements Request {
     }
 
     @Override
-    public byte[] getBody() {
+    public synchronized byte[] getBody() {
         if (cachedBody == null) {
             try {
                 byte[] body = toByteArray(request.getInputStream());
