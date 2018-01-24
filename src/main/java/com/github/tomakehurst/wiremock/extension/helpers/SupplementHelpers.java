@@ -9,6 +9,7 @@ public class SupplementHelpers {
 	
 	static {
 		helpers.add(new UUIDHelper());
+		helpers.add(new RegexHelper());
 	}
 	
 	public static List<INamedHelper> values() {
