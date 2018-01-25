@@ -128,6 +128,7 @@ public class AsyncCallbackTask {
 							Thread.sleep(delay);
 						}
 						notifier.info(String.format("Execute callback %s", url));
+						notifier.info(String.format("  body = %s", body));
 
 						response = httpclient.execute(request);
 					} catch (Exception e) {
