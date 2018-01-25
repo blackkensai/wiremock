@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.jknack.handlebars.Handlebars.SafeString;
 import com.github.jknack.handlebars.Options;
 
 public class RegexHelper implements INamedHelper {
@@ -25,19 +26,19 @@ public class RegexHelper implements INamedHelper {
 		} else if (group instanceof Integer) {
 			indexedGroup = (Integer) group;
 		} else {
-			return String.format("Unknown group type: %s", group.getClass());
+			return new SafeString(String.format("Unknown group type: %s", group.getClass()));
 		}
 		Matcher matcher = Pattern.compile(regex).matcher(str);
 		if (matcher.find()) {
 			if (indexedGroup >= 0) {
-				return matcher.group(indexedGroup);
+				return new SafeString(matcher.group(indexedGroup));
 			} else if (namedGroup.length() > 0) {
-				return matcher.group(namedGroup);
+				return new SafeString(matcher.group(namedGroup));
 			} else {
-				return matcher.group(0);
+				return new SafeString(matcher.group(0));
 			}
 		}
-		return String.format("Regex not matched: '%s' to '%s'", regex, str);
+		return new SafeString(String.format("Regex not matched: '%s' to '%s'", regex, str));
 	}
 
 	@Override
