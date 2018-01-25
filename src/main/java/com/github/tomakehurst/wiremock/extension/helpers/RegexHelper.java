@@ -1,6 +1,7 @@
 package com.github.tomakehurst.wiremock.extension.helpers;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,8 +14,12 @@ public class RegexHelper implements INamedHelper {
 		String str = value.toString();
 		String regex = options.param(0);
 		Object group = options.param(1, (Object) 0);
+		boolean escape = options.hash("escape", false);
 		String namedGroup = "";
 		Integer indexedGroup = -1;
+		if (escape) {
+			str = URLDecoder.decode(str, "utf-8");
+		}
 		if (group instanceof String) {
 			namedGroup = group.toString();
 		} else if (group instanceof Integer) {
@@ -22,9 +27,6 @@ public class RegexHelper implements INamedHelper {
 		} else {
 			return String.format("Unknown group type: %s", group.getClass());
 		}
-		/// * if (namedGroup.matches("\\d+")) {
-		// indexedGroup = Integer.parseInt(namedGroup);
-		// }*/
 		Matcher matcher = Pattern.compile(regex).matcher(str);
 		if (matcher.find()) {
 			if (indexedGroup >= 0) {
